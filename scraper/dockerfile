@@ -1,0 +1,24 @@
+# Use a Node.js base image
+FROM node:latest
+
+COPY package.json /tmp/package.json
+
+RUN cd /tmp && npm install
+RUN mkdir -p /app && cp -a /tmp/node_modules /app && cp -a /tmp/package.json /app
+
+# Set the working directory
+WORKDIR /app
+
+COPY tsconfig.json ./
+COPY . .
+
+# Install chromium for puppeteer
+RUN apt-get update \
+  && apt-get install -y chromium \
+  fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
+  --no-install-recommends
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+CMD [ "npm", "start" ]

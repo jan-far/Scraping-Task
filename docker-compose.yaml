@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: luxonis-db
+    restart: always
+    env_file: .env
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s 
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  scraper:
+    build:
+      context: ./scraper
+    container_name: my-scraper
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  server:
+    build:
+      context: ./server
+    container_name: my-server
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      scraper:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:3001 || exit 1
+      timeout: 5s
+      retries: 5
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: my-client
+    ports:
+      - "80:80"
+    depends_on:
+      server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:80 || exit 1
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    depends_on:
+      server:
+        condition: service_healthy
+      client:
+        condition: service_healthy
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    container_name: 'my-nginx'
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg-data: 

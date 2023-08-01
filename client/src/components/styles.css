@@ -1,0 +1,113 @@
+/* App*/
+.container {
+  display: "flex";
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Listing */
+.listContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 2rem;
+  column-gap: 12px;
+}
+
+.title {
+  padding-inline-start: 40px;
+  margin-block: 0px;
+}
+
+/* Image carosuel */
+.imgContainer {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  place-content: center;
+  width: 100%;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.img {
+  width: 400px;
+  height: auto;
+}
+
+.btn {
+  position: relative;
+  border: none;
+  height: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-prev {
+  left: 40px;
+}
+
+.btn-next {
+  right: 40px;
+}
+
+.dots {
+  display: flex;
+  flex-direction: row;
+  place-items: center;
+  place-content: center;
+  column-gap: 5px;
+  list-style: none;
+  margin-block: 3px;
+  margin-bottom: 10px;
+  margin-left: -40px;
+}
+
+li.active {
+  background-color: blue;
+}
+
+li {
+  background-color: gray;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+.pagination-item {
+  margin: 0 0.5em;
+  padding: 0.5em 1em;
+  border: 1px solid #ddd;
+  color: #333;
+  cursor: pointer;
+  background-color: #fff;
+  text-decoration: none;
+}
+
+.pagination-item.disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination-item.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination-item:not(.disabled):hover {
+  background-color: #ddd;
+}
